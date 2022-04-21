@@ -6,12 +6,13 @@
 }
 
 body {
-    background: dodgerblue;
+    background: #28dca8;
     color: #fff;
     font-family: 'IBM Plex Serif', serif;
 }
 
 .heading {
+    color: #101561;;
     text-align: center;
     font-size: 40px;
     padding: 20px 0;
@@ -28,5 +29,41 @@ body {
     width: 100%;
     border-radius: 15px;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, .3);
+}
+
+ul {
+    margin-left: 400px;
+}
+
+.country-card {
+    background: linear-gradient(45deg, #d500d5, #1936e5);
+    margin: 10px 0;
+    padding: 10px 20px;
+    width: fit-content;
+    border-radius: 8px;
+
+}
+
+.country-card::before {
+    content: '';
+    width: 30px;
+    display: block;
+    background: white;
+    height: 40px;
+    position: relative;
+    top: -10px;
+    left: -50px;
+    vertical-align: middle;
+}
+
+.country-data {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 50px;
+}
+
+.flag {
+    width: 80px;
 }
 /*# sourceMappingURL=index.be5cf2f4.css.map */
