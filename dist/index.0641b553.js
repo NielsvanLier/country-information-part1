@@ -6,7 +6,7 @@
 // anything defined in a previous bundle is accessed via the
 // orig method which is the require for previous bundles
 
-(function(modules, entry, mainEntry, parcelRequireName, globalName) {
+(function (modules, entry, mainEntry, parcelRequireName, globalName) {
   /* eslint-disable no-undef */
   var globalObject =
     typeof globalThis !== 'undefined'
@@ -80,11 +80,13 @@
     return cache[name].exports;
 
     function localRequire(x) {
-      return newRequire(localRequire.resolve(x));
+      var res = localRequire.resolve(x);
+      return res === false ? {} : newRequire(res);
     }
 
     function resolve(x) {
-      return modules[name][1][x] || x;
+      var id = modules[name][1][x];
+      return id != null ? id : x;
     }
   }
 
@@ -99,9 +101,9 @@
   newRequire.modules = modules;
   newRequire.cache = cache;
   newRequire.parent = previousRequire;
-  newRequire.register = function(id, exports) {
+  newRequire.register = function (id, exports) {
     modules[id] = [
-      function(require, module) {
+      function (require, module) {
         module.exports = exports;
       },
       {},
@@ -109,7 +111,7 @@
   };
 
   Object.defineProperty(newRequire, 'root', {
-    get: function() {
+    get: function () {
       return globalObject[parcelRequireName];
     },
   });
@@ -131,7 +133,7 @@
 
       // RequireJS
     } else if (typeof define === 'function' && define.amd) {
-      define(function() {
+      define(function () {
         return mainExports;
       });
 
@@ -140,21 +142,32 @@
       this[globalName] = mainExports;
     }
   }
-})({"1Mq12":[function(require,module,exports) {
+})({"jKwHT":[function(require,module,exports) {
+"use strict";
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
-var HMR_ENV_HASH = "4a236f9275d0a351";
-module.bundle.HMR_BUNDLE_ID = "b5b6c481d56a3cb1";
-"use strict";
+var HMR_ENV_HASH = "d6ea1d42532a7575";
+module.bundle.HMR_BUNDLE_ID = "fe4256060641b553";
+function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+}
+function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _iterableToArray(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+}
+function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
 function _createForOfIteratorHelper(o, allowArrayLike) {
-    var it;
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
+    if (!it) {
         if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
             if (it) o = it;
             var i = 0;
-            var F = function F() {
-            };
+            var F = function F() {};
             return {
                 s: F,
                 n: function n() {
@@ -177,7 +190,7 @@ function _createForOfIteratorHelper(o, allowArrayLike) {
     var normalCompletion = true, didErr = false, err;
     return {
         s: function s() {
-            it = o[Symbol.iterator]();
+            it = it.call(o);
         },
         n: function n() {
             var step = it.next();
@@ -210,7 +223,7 @@ function _arrayLikeToArray(arr, len) {
     for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
     return arr2;
 }
-/* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE */ /*::
+/* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser */ /*::
 import type {
   HMRAsset,
   HMRMessage,
@@ -237,11 +250,18 @@ interface ParcelModule {
     _disposeCallbacks: Array<(mixed) => void>,
   |};
 }
+interface ExtensionContext {
+  runtime: {|
+    reload(): void,
+  |};
+}
 declare var module: {bundle: ParcelRequire, ...};
 declare var HMR_HOST: string;
 declare var HMR_PORT: string;
 declare var HMR_ENV_HASH: string;
 declare var HMR_SECURE: boolean;
+declare var chrome: ExtensionContext;
+declare var browser: ExtensionContext;
 */ var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
 function Module(moduleName) {
@@ -251,8 +271,7 @@ function Module(moduleName) {
         _acceptCallbacks: [],
         _disposeCallbacks: [],
         accept: function accept(fn) {
-            this._acceptCallbacks.push(fn || function() {
-            });
+            this._acceptCallbacks.push(fn || function() {});
         },
         dispose: function dispose(fn) {
             this._disposeCallbacks.push(fn);
@@ -261,7 +280,7 @@ function Module(moduleName) {
     module.bundle.hotData = undefined;
 }
 module.bundle.Module = Module;
-var checkedAssets, acceptedAssets, assetsToAccept;
+var checkedAssets, acceptedAssets, assetsToAccept /*: Array<[ParcelRequire, string]> */ ;
 function getHostname() {
     return HMR_HOST || (location.protocol.indexOf('http') === 0 ? location.hostname : 'localhost');
 }
@@ -275,10 +294,8 @@ if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
     var protocol = HMR_SECURE || location.protocol == 'https:' && !/localhost|127.0.0.1|0.0.0.0/.test(hostname) ? 'wss' : 'ws';
     var ws = new WebSocket(protocol + '://' + hostname + (port ? ':' + port : '') + '/'); // $FlowFixMe
     ws.onmessage = function(event) {
-        checkedAssets = {
-        };
-        acceptedAssets = {
-        };
+        checkedAssets = {} /*: {|[string]: boolean|} */ ;
+        acceptedAssets = {} /*: {|[string]: boolean|} */ ;
         assetsToAccept = [];
         var data = JSON.parse(event.data);
         if (data.type === 'update') {
@@ -299,7 +316,12 @@ if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
                     var id = assetsToAccept[i][1];
                     if (!acceptedAssets[id]) hmrAcceptRun(assetsToAccept[i][0], id);
                 }
-            } else window.location.reload();
+            } else if ('reload' in location) location.reload();
+            else {
+                // Web extension context
+                var ext = typeof chrome === 'undefined' ? typeof browser === 'undefined' ? null : browser : chrome;
+                if (ext && ext.runtime && ext.runtime.reload) ext.runtime.reload();
+            }
         }
         if (data.type === 'error') {
             // Log parcel errors to console
@@ -393,7 +415,7 @@ function reloadCSS() {
             var href = links[i].getAttribute('href');
             var hostname = getHostname();
             var servedFromHMRServer = hostname === 'localhost' ? new RegExp('^(https?:\\/\\/(0.0.0.0|127.0.0.1)|localhost):' + getPort()).test(href) : href.indexOf(hostname + ':' + getPort());
-            var absolute = /^https?:\/\//i.test(href) && href.indexOf(window.location.origin) !== 0 && !servedFromHMRServer;
+            var absolute = /^https?:\/\//i.test(href) && href.indexOf(location.origin) !== 0 && !servedFromHMRServer;
             if (!absolute) updateLink(links[i]);
         }
         cssTimeout = null;
@@ -406,6 +428,16 @@ function hmrApply(bundle, asset) {
     else if (asset.type === 'js') {
         var deps = asset.depsByBundle[bundle.HMR_BUNDLE_ID];
         if (deps) {
+            if (modules[asset.id]) {
+                // Remove dependencies that are removed and will become orphaned.
+                // This is necessary so that if the asset is added back again, the cache is gone, and we prevent a full page reload.
+                var oldDeps = modules[asset.id][1];
+                for(var dep in oldDeps)if (!deps[dep] || deps[dep] !== oldDeps[dep]) {
+                    var id = oldDeps[dep];
+                    var parents = getParents(module.bundle.root, id);
+                    if (parents.length === 1) hmrDelete(module.bundle.root, id);
+                }
+            }
             var fn = new Function('require', 'module', 'exports', asset.output);
             modules[asset.id] = [
                 fn,
@@ -414,7 +446,48 @@ function hmrApply(bundle, asset) {
         } else if (bundle.parent) hmrApply(bundle.parent, asset);
     }
 }
+function hmrDelete(bundle, id1) {
+    var modules = bundle.modules;
+    if (!modules) return;
+    if (modules[id1]) {
+        // Collect dependencies that will become orphaned when this module is deleted.
+        var deps = modules[id1][1];
+        var orphans = [];
+        for(var dep in deps){
+            var parents = getParents(module.bundle.root, deps[dep]);
+            if (parents.length === 1) orphans.push(deps[dep]);
+        } // Delete the module. This must be done before deleting dependencies in case of circular dependencies.
+        delete modules[id1];
+        delete bundle.cache[id1]; // Now delete the orphans.
+        orphans.forEach(function(id) {
+            hmrDelete(module.bundle.root, id);
+        });
+    } else if (bundle.parent) hmrDelete(bundle.parent, id1);
+}
 function hmrAcceptCheck(bundle, id, depsByBundle) {
+    if (hmrAcceptCheckOne(bundle, id, depsByBundle)) return true;
+     // Traverse parents breadth first. All possible ancestries must accept the HMR update, or we'll reload.
+    var parents = getParents(module.bundle.root, id);
+    var accepted = false;
+    while(parents.length > 0){
+        var v = parents.shift();
+        var a = hmrAcceptCheckOne(v[0], v[1], null);
+        if (a) // If this parent accepts, stop traversing upward, but still consider siblings.
+        accepted = true;
+        else {
+            // Otherwise, queue the parents in the next level upward.
+            var p = getParents(module.bundle.root, v[1]);
+            if (p.length === 0) {
+                // If there are no parents, then we've reached an entry without accepting. Reload.
+                accepted = false;
+                break;
+            }
+            parents.push.apply(parents, _toConsumableArray(p));
+        }
+    }
+    return accepted;
+}
+function hmrAcceptCheckOne(bundle, id, depsByBundle) {
     var modules = bundle.modules;
     if (!modules) return;
     if (depsByBundle && !depsByBundle[bundle.HMR_BUNDLE_ID]) {
@@ -430,17 +503,11 @@ function hmrAcceptCheck(bundle, id, depsByBundle) {
         bundle,
         id
     ]);
-    if (cached && cached.hot && cached.hot._acceptCallbacks.length) return true;
-    var parents = getParents(module.bundle.root, id); // If no parents, the asset is new. Prevent reloading the page.
-    if (!parents.length) return true;
-    return parents.some(function(v) {
-        return hmrAcceptCheck(v[0], v[1], null);
-    });
+    if (!cached || cached.hot && cached.hot._acceptCallbacks.length) return true;
 }
 function hmrAcceptRun(bundle, id) {
     var cached = bundle.cache[id];
-    bundle.hotData = {
-    };
+    bundle.hotData = {};
     if (cached && cached.hot) cached.hot.data = bundle.hotData;
     if (cached && cached.hot && cached.hot._disposeCallbacks.length) cached.hot._disposeCallbacks.forEach(function(cb) {
         cb(bundle.hotData);
@@ -458,7 +525,7 @@ function hmrAcceptRun(bundle, id) {
     acceptedAssets[id] = true;
 }
 
-},{}],"5HwUs":[function(require,module,exports) {
+},{}],"bNKaB":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
@@ -469,66 +536,36 @@ async function getFromApi() {
             return a.population - b.population;
         });
         result.data.map((i)=>{
+            const region = i.region;
+            let regionColor = '';
+            //regiokleur teruggeven
+            function getColor() {
+                if (region === 'Africa') return regionColor = 'blue';
+                else if (region === 'Americas') return regionColor = 'green';
+                else if (region === 'Asia') return regionColor = 'red';
+                else if (region === 'Europe') return regionColor = 'yellow';
+                else if (region === 'Oceania') return regionColor = 'purple';
+                else return regionColor = 'black';
+            }
+            getColor();
             let newElement = document.createElement('div');
             newElement.classList.add('country-card');
-            newElement.innerHTML = `<li class="country-data"><img class="flag" src="${i.flag}"><p class="country-name" style="color: yellow">${i.name}</p></br>
+            newElement.innerHTML = `<li class="country-data"><img class="flag" src="${i.flag}"><p class="country-name" style="color: ${regionColor}">${i.name}</p></br>
                                <p class="country-population">Has a population of ${i.population} people</p></li>`;
-            const region = i.region;
-            function getRegionColor(region) {
-                switch(region){
-                    case 'Africa':
-                        return 'blue';
-                        break;
-                    case 'Americas':
-                        return 'green';
-                        break;
-                    case 'Asia':
-                        return 'red';
-                        break;
-                    case 'Europe':
-                        return 'yellow';
-                        break;
-                    case 'Oceania':
-                        return 'purple';
-                        break;
-                    default:
-                        return 'black';
-                        break;
-                }
-            }
-            return region;
+            const landList = document.getElementById('landen');
+            landList.appendChild(newElement);
         });
-        /*     const region =  i.region;
-        let regionColor = '';
-        //regiokleur teruggeven
-        if (region === 'Africa') {
-            regionColor = 'blue';
-        } else if (region === 'Americas') {
-            regionColor = 'green';
-        } else if (region === 'Asia') {
-            regionColor = 'red';
-        } else if (region === 'Europe') {
-            regionColor = 'yellow';
-        } else if (region === 'Oceania') {
-            regionColor = 'purple';
-        } else {
-            regionColor = 'black';
-        }
-
-        //style de namen van de landen op regiokleur*/ /*function change() {
-            const countryColor = document.getElementsByClassName('country-card::before');
-            countryColor.style.backgroundColor = 'pink';
-        } change()  werkt niet, why? */ return result; //Kan dit niet lezen buiten de functie, why??
+        return result; //Kan dit niet lezen buiten de functie, why??
     } catch (e) {
         console.error(e);
     }
 }
-getFromApi(); // Country info 2 opdrachten
+getFromApi();
 
-},{"axios":"1IeuP","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"1IeuP":[function(require,module,exports) {
+},{"axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jo6P5":[function(require,module,exports) {
 module.exports = require('./lib/axios');
 
-},{"./lib/axios":"ePOwX"}],"ePOwX":[function(require,module,exports) {
+},{"./lib/axios":"63MyY"}],"63MyY":[function(require,module,exports) {
 'use strict';
 var utils = require('./utils');
 var bind = require('./helpers/bind');
@@ -573,7 +610,7 @@ module.exports = axios;
 // Allow use of default import syntax in TypeScript
 module.exports.default = axios;
 
-},{"./utils":"60BxC","./helpers/bind":"dYB0d","./core/Axios":"90S9u","./core/mergeConfig":"3C70I","./defaults":"90CP2","./cancel/Cancel":"23h6O","./cancel/CancelToken":"7tnIm","./cancel/isCancel":"8W2MY","./env/data":"eW1zO","./helpers/spread":"8AMVi","./helpers/isAxiosError":"1s7p9"}],"60BxC":[function(require,module,exports) {
+},{"./utils":"5By4s","./helpers/bind":"haRQb","./core/Axios":"cpqD8","./core/mergeConfig":"b85oP","./defaults":"hXfHM","./cancel/Cancel":"kjMy2","./cancel/CancelToken":"45wzn","./cancel/isCancel":"a0VmF","./env/data":"h29L9","./helpers/spread":"dyQ8N","./helpers/isAxiosError":"eyiLq"}],"5By4s":[function(require,module,exports) {
 'use strict';
 var bind = require('./helpers/bind');
 // utils is a library of generic helper functions non-specific to axios
@@ -779,12 +816,10 @@ var toString = Object.prototype.toString;
  * @param {Object} obj1 Object to merge
  * @returns {Object} Result of all merge properties
  */ function merge() {
-    var result = {
-    };
+    var result = {};
     function assignValue(val, key) {
         if (isPlainObject(result[key]) && isPlainObject(val)) result[key] = merge(result[key], val);
-        else if (isPlainObject(val)) result[key] = merge({
-        }, val);
+        else if (isPlainObject(val)) result[key] = merge({}, val);
         else if (isArray(val)) result[key] = val.slice();
         else result[key] = val;
     }
@@ -811,7 +846,7 @@ var toString = Object.prototype.toString;
  * @param {string} content with BOM
  * @return {string} content value without BOM
  */ function stripBOM(content) {
-    if (content.charCodeAt(0) === 65279) content = content.slice(1);
+    if (content.charCodeAt(0) === 0xFEFF) content = content.slice(1);
     return content;
 }
 module.exports = {
@@ -839,7 +874,7 @@ module.exports = {
     stripBOM: stripBOM
 };
 
-},{"./helpers/bind":"dYB0d"}],"dYB0d":[function(require,module,exports) {
+},{"./helpers/bind":"haRQb"}],"haRQb":[function(require,module,exports) {
 'use strict';
 module.exports = function bind(fn, thisArg) {
     return function wrap() {
@@ -849,7 +884,7 @@ module.exports = function bind(fn, thisArg) {
     };
 };
 
-},{}],"90S9u":[function(require,module,exports) {
+},{}],"cpqD8":[function(require,module,exports) {
 'use strict';
 var utils = require('./../utils');
 var buildURL = require('../helpers/buildURL');
@@ -876,11 +911,9 @@ var validators = validator.validators;
  */ Axios.prototype.request = function request(configOrUrl, config) {
     /*eslint no-param-reassign:0*/ // Allow for axios('example/url'[, config]) a la fetch API
     if (typeof configOrUrl === 'string') {
-        config = config || {
-        };
+        config = config || {};
         config.url = configOrUrl;
-    } else config = configOrUrl || {
-    };
+    } else config = configOrUrl || {};
     config = mergeConfig(this.defaults, config);
     // Set config.method
     if (config.method) config.method = config.method.toLowerCase();
@@ -947,12 +980,10 @@ utils.forEach([
     'options'
 ], function forEachMethodNoData(method) {
     /*eslint func-names:0*/ Axios.prototype[method] = function(url, config) {
-        return this.request(mergeConfig(config || {
-        }, {
+        return this.request(mergeConfig(config || {}, {
             method: method,
             url: url,
-            data: (config || {
-            }).data
+            data: (config || {}).data
         }));
     };
 });
@@ -962,8 +993,7 @@ utils.forEach([
     'patch'
 ], function forEachMethodWithData(method) {
     /*eslint func-names:0*/ Axios.prototype[method] = function(url, data, config) {
-        return this.request(mergeConfig(config || {
-        }, {
+        return this.request(mergeConfig(config || {}, {
             method: method,
             url: url,
             data: data
@@ -972,7 +1002,7 @@ utils.forEach([
 });
 module.exports = Axios;
 
-},{"./../utils":"60BxC","../helpers/buildURL":"lPZw9","./InterceptorManager":"4Q1Mi","./dispatchRequest":"baODi","./mergeConfig":"3C70I","../helpers/validator":"bw7Lu"}],"lPZw9":[function(require,module,exports) {
+},{"./../utils":"5By4s","../helpers/buildURL":"3bwC2","./InterceptorManager":"1VRIM","./dispatchRequest":"6sjJ6","./mergeConfig":"b85oP","../helpers/validator":"9vgkY"}],"3bwC2":[function(require,module,exports) {
 'use strict';
 var utils = require('./../utils');
 function encode(val) {
@@ -1013,7 +1043,7 @@ function encode(val) {
     return url;
 };
 
-},{"./../utils":"60BxC"}],"4Q1Mi":[function(require,module,exports) {
+},{"./../utils":"5By4s"}],"1VRIM":[function(require,module,exports) {
 'use strict';
 var utils = require('./../utils');
 function InterceptorManager() {
@@ -1056,7 +1086,7 @@ function InterceptorManager() {
 };
 module.exports = InterceptorManager;
 
-},{"./../utils":"60BxC"}],"baODi":[function(require,module,exports) {
+},{"./../utils":"5By4s"}],"6sjJ6":[function(require,module,exports) {
 'use strict';
 var utils = require('./../utils');
 var transformData = require('./transformData');
@@ -1077,14 +1107,11 @@ var Cancel = require('../cancel/Cancel');
  */ module.exports = function dispatchRequest(config) {
     throwIfCancellationRequested(config);
     // Ensure headers exist
-    config.headers = config.headers || {
-    };
+    config.headers = config.headers || {};
     // Transform request data
     config.data = transformData.call(config, config.data, config.headers, config.transformRequest);
     // Flatten headers
-    config.headers = utils.merge(config.headers.common || {
-    }, config.headers[config.method] || {
-    }, config.headers);
+    config.headers = utils.merge(config.headers.common || {}, config.headers[config.method] || {}, config.headers);
     utils.forEach([
         'delete',
         'get',
@@ -1112,7 +1139,7 @@ var Cancel = require('../cancel/Cancel');
     });
 };
 
-},{"./../utils":"60BxC","./transformData":"62fpb","../cancel/isCancel":"8W2MY","../defaults":"90CP2","../cancel/Cancel":"23h6O"}],"62fpb":[function(require,module,exports) {
+},{"./../utils":"5By4s","./transformData":"eRqJY","../cancel/isCancel":"a0VmF","../defaults":"hXfHM","../cancel/Cancel":"kjMy2"}],"eRqJY":[function(require,module,exports) {
 'use strict';
 var utils = require('./../utils');
 var defaults = require('../defaults');
@@ -1131,9 +1158,9 @@ var defaults = require('../defaults');
     return data;
 };
 
-},{"./../utils":"60BxC","../defaults":"90CP2"}],"90CP2":[function(require,module,exports) {
-var process = require("process");
+},{"./../utils":"5By4s","../defaults":"hXfHM"}],"hXfHM":[function(require,module,exports) {
 'use strict';
+var process = require("process");
 var utils = require('../utils');
 var normalizeHeaderName = require('../helpers/normalizeHeaderName');
 var enhanceError = require('../core/enhanceError');
@@ -1220,8 +1247,7 @@ utils.forEach([
     'get',
     'head'
 ], function forEachMethodNoData(method) {
-    defaults.headers[method] = {
-    };
+    defaults.headers[method] = {};
 });
 utils.forEach([
     'post',
@@ -1232,10 +1258,9 @@ utils.forEach([
 });
 module.exports = defaults;
 
-},{"process":"lDnB8","../utils":"60BxC","../helpers/normalizeHeaderName":"gXQ9Q","../core/enhanceError":"cZtoX","./transitional":"bpgFs","../adapters/xhr":"1BOMK","../adapters/http":"1BOMK"}],"lDnB8":[function(require,module,exports) {
+},{"process":"d5jf4","../utils":"5By4s","../helpers/normalizeHeaderName":"adBZo","../core/enhanceError":"itUQr","./transitional":"lM32f","../adapters/xhr":"ldm57","../adapters/http":"ldm57"}],"d5jf4":[function(require,module,exports) {
 // shim for using process in browser
-var process = module.exports = {
-};
+var process = module.exports = {};
 // cached from whatever global is present so that test runners that stub it
 // don't break things.  But we need to wrap it in a try catch in case it is
 // wrapped in strict mode code which doesn't define any globals.  It's inside a
@@ -1348,14 +1373,11 @@ Item.prototype.run = function() {
 };
 process.title = 'browser';
 process.browser = true;
-process.env = {
-};
+process.env = {};
 process.argv = [];
 process.version = ''; // empty string to avoid regexp issues
-process.versions = {
-};
-function noop() {
-}
+process.versions = {};
+function noop() {}
 process.on = noop;
 process.addListener = noop;
 process.once = noop;
@@ -1381,7 +1403,7 @@ process.umask = function() {
     return 0;
 };
 
-},{}],"gXQ9Q":[function(require,module,exports) {
+},{}],"adBZo":[function(require,module,exports) {
 'use strict';
 var utils = require('../utils');
 module.exports = function normalizeHeaderName(headers, normalizedName) {
@@ -1393,7 +1415,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
     });
 };
 
-},{"../utils":"60BxC"}],"cZtoX":[function(require,module,exports) {
+},{"../utils":"5By4s"}],"itUQr":[function(require,module,exports) {
 'use strict';
 /**
  * Update an Error with the specified config, error code, and response.
@@ -1432,7 +1454,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
     return error;
 };
 
-},{}],"bpgFs":[function(require,module,exports) {
+},{}],"lM32f":[function(require,module,exports) {
 'use strict';
 module.exports = {
     silentJSONParsing: true,
@@ -1440,7 +1462,7 @@ module.exports = {
     clarifyTimeoutError: false
 };
 
-},{}],"1BOMK":[function(require,module,exports) {
+},{}],"ldm57":[function(require,module,exports) {
 'use strict';
 var utils = require('./../utils');
 var settle = require('./../core/settle');
@@ -1576,7 +1598,7 @@ module.exports = function xhrAdapter(config) {
     });
 };
 
-},{"./../utils":"60BxC","./../core/settle":"c4IyS","./../helpers/cookies":"5sHG9","./../helpers/buildURL":"lPZw9","../core/buildFullPath":"24S8y","./../helpers/parseHeaders":"jZkkm","./../helpers/isURLSameOrigin":"ho6wD","../core/createError":"4CdwW","../defaults/transitional":"bpgFs","../cancel/Cancel":"23h6O"}],"c4IyS":[function(require,module,exports) {
+},{"./../utils":"5By4s","./../core/settle":"dD9aC","./../helpers/cookies":"4WJjt","./../helpers/buildURL":"3bwC2","../core/buildFullPath":"1I5TW","./../helpers/parseHeaders":"kqDd5","./../helpers/isURLSameOrigin":"lxXtv","../core/createError":"5nVS9","../defaults/transitional":"lM32f","../cancel/Cancel":"kjMy2"}],"dD9aC":[function(require,module,exports) {
 'use strict';
 var createError = require('./createError');
 /**
@@ -1591,7 +1613,7 @@ var createError = require('./createError');
     else reject(createError('Request failed with status code ' + response.status, response.config, null, response.request, response));
 };
 
-},{"./createError":"4CdwW"}],"4CdwW":[function(require,module,exports) {
+},{"./createError":"5nVS9"}],"5nVS9":[function(require,module,exports) {
 'use strict';
 var enhanceError = require('./enhanceError');
 /**
@@ -1608,11 +1630,11 @@ var enhanceError = require('./enhanceError');
     return enhanceError(error, config, code, request, response);
 };
 
-},{"./enhanceError":"cZtoX"}],"5sHG9":[function(require,module,exports) {
+},{"./enhanceError":"itUQr"}],"4WJjt":[function(require,module,exports) {
 'use strict';
 var utils = require('./../utils');
 module.exports = utils.isStandardBrowserEnv() ? // Standard browser envs support document.cookie
-(function standardBrowserEnv() {
+function standardBrowserEnv() {
     return {
         write: function write(name, value, expires, path, domain, secure) {
             var cookie = [];
@@ -1631,20 +1653,18 @@ module.exports = utils.isStandardBrowserEnv() ? // Standard browser envs support
             this.write(name, '', Date.now() - 86400000);
         }
     };
-})() : // Non standard browser env (web workers, react-native) lack needed support.
-(function nonStandardBrowserEnv() {
+}() : // Non standard browser env (web workers, react-native) lack needed support.
+function nonStandardBrowserEnv() {
     return {
-        write: function write() {
-        },
+        write: function write() {},
         read: function read() {
             return null;
         },
-        remove: function remove() {
-        }
+        remove: function remove() {}
     };
-})();
+}();
 
-},{"./../utils":"60BxC"}],"24S8y":[function(require,module,exports) {
+},{"./../utils":"5By4s"}],"1I5TW":[function(require,module,exports) {
 'use strict';
 var isAbsoluteURL = require('../helpers/isAbsoluteURL');
 var combineURLs = require('../helpers/combineURLs');
@@ -1661,7 +1681,7 @@ var combineURLs = require('../helpers/combineURLs');
     return requestedURL;
 };
 
-},{"../helpers/isAbsoluteURL":"aFD0Y","../helpers/combineURLs":"1TAvX"}],"aFD0Y":[function(require,module,exports) {
+},{"../helpers/isAbsoluteURL":"jD6NM","../helpers/combineURLs":"brOWK"}],"jD6NM":[function(require,module,exports) {
 'use strict';
 /**
  * Determines whether the specified URL is absolute
@@ -1675,7 +1695,7 @@ var combineURLs = require('../helpers/combineURLs');
     return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
 };
 
-},{}],"1TAvX":[function(require,module,exports) {
+},{}],"brOWK":[function(require,module,exports) {
 'use strict';
 /**
  * Creates a new URL by combining the specified URLs
@@ -1687,7 +1707,7 @@ var combineURLs = require('../helpers/combineURLs');
     return relativeURL ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '') : baseURL;
 };
 
-},{}],"jZkkm":[function(require,module,exports) {
+},{}],"kqDd5":[function(require,module,exports) {
 'use strict';
 var utils = require('./../utils');
 // Headers whose duplicates are ignored by node
@@ -1724,8 +1744,7 @@ var ignoreDuplicateOf = [
  * @param {String} headers Headers needing to be parsed
  * @returns {Object} Headers parsed into an object
  */ module.exports = function parseHeaders(headers) {
-    var parsed = {
-    };
+    var parsed = {};
     var key;
     var val;
     var i;
@@ -1745,12 +1764,12 @@ var ignoreDuplicateOf = [
     return parsed;
 };
 
-},{"./../utils":"60BxC"}],"ho6wD":[function(require,module,exports) {
+},{"./../utils":"5By4s"}],"lxXtv":[function(require,module,exports) {
 'use strict';
 var utils = require('./../utils');
 module.exports = utils.isStandardBrowserEnv() ? // Standard browser envs have full support of the APIs needed to test
 // whether the request URL is of the same origin as current location.
-(function standardBrowserEnv() {
+function standardBrowserEnv() {
     var msie = /(msie|trident)/i.test(navigator.userAgent);
     var urlParsingNode = document.createElement('a');
     var originURL;
@@ -1789,14 +1808,14 @@ module.exports = utils.isStandardBrowserEnv() ? // Standard browser envs have fu
         var parsed = utils.isString(requestURL) ? resolveURL(requestURL) : requestURL;
         return parsed.protocol === originURL.protocol && parsed.host === originURL.host;
     };
-})() : // Non standard browser envs (web workers, react-native) lack needed support.
-(function nonStandardBrowserEnv() {
+}() : // Non standard browser envs (web workers, react-native) lack needed support.
+function nonStandardBrowserEnv() {
     return function isURLSameOrigin() {
         return true;
     };
-})();
+}();
 
-},{"./../utils":"60BxC"}],"23h6O":[function(require,module,exports) {
+},{"./../utils":"5By4s"}],"kjMy2":[function(require,module,exports) {
 'use strict';
 /**
  * A `Cancel` is an object that is thrown when an operation is canceled.
@@ -1812,13 +1831,13 @@ Cancel.prototype.toString = function toString() {
 Cancel.prototype.__CANCEL__ = true;
 module.exports = Cancel;
 
-},{}],"8W2MY":[function(require,module,exports) {
+},{}],"a0VmF":[function(require,module,exports) {
 'use strict';
 module.exports = function isCancel(value) {
     return !!(value && value.__CANCEL__);
 };
 
-},{}],"3C70I":[function(require,module,exports) {
+},{}],"b85oP":[function(require,module,exports) {
 'use strict';
 var utils = require('../utils');
 /**
@@ -1830,14 +1849,11 @@ var utils = require('../utils');
  * @returns {Object} New object resulting from merging config2 to config1
  */ module.exports = function mergeConfig(config1, config2) {
     // eslint-disable-next-line no-param-reassign
-    config2 = config2 || {
-    };
-    var config = {
-    };
+    config2 = config2 || {};
+    var config = {};
     function getMergedValue(target, source) {
         if (utils.isPlainObject(target) && utils.isPlainObject(source)) return utils.merge(target, source);
-        else if (utils.isPlainObject(source)) return utils.merge({
-        }, source);
+        else if (utils.isPlainObject(source)) return utils.merge({}, source);
         else if (utils.isArray(source)) return source.slice();
         return source;
     }
@@ -1896,11 +1912,10 @@ var utils = require('../utils');
     return config;
 };
 
-},{"../utils":"60BxC"}],"bw7Lu":[function(require,module,exports) {
+},{"../utils":"5By4s"}],"9vgkY":[function(require,module,exports) {
 'use strict';
 var VERSION = require('../env/data').version;
-var validators = {
-};
+var validators = {};
 // eslint-disable-next-line func-names
 [
     'object',
@@ -1914,8 +1929,7 @@ var validators = {
         return typeof thing === type || 'a' + (i < 1 ? 'n ' : ' ') + type;
     };
 });
-var deprecatedWarnings = {
-};
+var deprecatedWarnings = {};
 /**
  * Transitional option validator
  * @param {function|boolean?} validator - set to false if the transitional option has been removed
@@ -1963,12 +1977,12 @@ module.exports = {
     validators: validators
 };
 
-},{"../env/data":"eW1zO"}],"eW1zO":[function(require,module,exports) {
+},{"../env/data":"h29L9"}],"h29L9":[function(require,module,exports) {
 module.exports = {
     "version": "0.26.1"
 };
 
-},{}],"7tnIm":[function(require,module,exports) {
+},{}],"45wzn":[function(require,module,exports) {
 'use strict';
 var Cancel = require('./Cancel');
 /**
@@ -2050,7 +2064,7 @@ var Cancel = require('./Cancel');
 };
 module.exports = CancelToken;
 
-},{"./Cancel":"23h6O"}],"8AMVi":[function(require,module,exports) {
+},{"./Cancel":"kjMy2"}],"dyQ8N":[function(require,module,exports) {
 'use strict';
 /**
  * Syntactic sugar for invoking a function and expanding an array for arguments.
@@ -2077,7 +2091,7 @@ module.exports = CancelToken;
     };
 };
 
-},{}],"1s7p9":[function(require,module,exports) {
+},{}],"eyiLq":[function(require,module,exports) {
 'use strict';
 var utils = require('./../utils');
 /**
@@ -2089,7 +2103,7 @@ var utils = require('./../utils');
     return utils.isObject(payload) && payload.isAxiosError === true;
 };
 
-},{"./../utils":"60BxC"}],"ciiiV":[function(require,module,exports) {
+},{"./../utils":"5By4s"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -2119,6 +2133,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["1Mq12","5HwUs"], "5HwUs", "parcelRequirecb08")
+},{}]},["jKwHT","bNKaB"], "bNKaB", "parcelRequirecb08")
 
-//# sourceMappingURL=index.d56a3cb1.js.map
+//# sourceMappingURL=index.0641b553.js.map

@@ -140,12 +140,12 @@
       this[globalName] = mainExports;
     }
   }
-})({"1Mq12":[function(require,module,exports) {
+})({"6BPv4":[function(require,module,exports) {
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "4a236f9275d0a351";
-module.bundle.HMR_BUNDLE_ID = "b5b6c481d56a3cb1";
+module.bundle.HMR_BUNDLE_ID = "ab49cac0eddb7c3f";
 "use strict";
 function _createForOfIteratorHelper(o, allowArrayLike) {
     var it;
@@ -458,72 +458,67 @@ function hmrAcceptRun(bundle, id) {
     acceptedAssets[id] = true;
 }
 
-},{}],"5HwUs":[function(require,module,exports) {
+},{}],"1hFYX":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
-async function getFromApi() {
-    try {
-        const result = await _axiosDefault.default.get('https://restcountries.com/v2/all');
-        result.data.sort((a, b)=>{
-            return a.population - b.population;
-        });
-        result.data.map((i)=>{
-            let newElement = document.createElement('div');
-            newElement.classList.add('country-card');
-            newElement.innerHTML = `<li class="country-data"><img class="flag" src="${i.flag}"><p class="country-name" style="color: yellow">${i.name}</p></br>
-                               <p class="country-population">Has a population of ${i.population} people</p></li>`;
-            const region = i.region;
-            function getRegionColor(region) {
-                switch(region){
-                    case 'Africa':
-                        return 'blue';
-                        break;
-                    case 'Americas':
-                        return 'green';
-                        break;
-                    case 'Asia':
-                        return 'red';
-                        break;
-                    case 'Europe':
-                        return 'yellow';
-                        break;
-                    case 'Oceania':
-                        return 'purple';
-                        break;
-                    default:
-                        return 'black';
-                        break;
-                }
+/*import axios from 'https://cdn.skypack.dev/axios';*/ //Haal de zoekwaarde op, declareer in een variabele, sla de ingevoerde zoekterm op in een variable
+//Schrijf deze acties in een functie die wordt geactiveerd door een click event op de zoek button
+//Maak een string aan die de searchValue aan de API url koppelt
+//Schrijf een functie die een get request doet aan de API met de apiUrl
+const searchValue = document.getElementById('search').value;
+const searchButton = document.getElementById('search-button');
+searchButton.addEventListener('click', getSearchValue);
+search.addEventListener('keyup', function(e) {
+    if (e.keyCode === 13) getSearchValue();
+});
+function getSearchValue() {
+    let searchValue = document.getElementById('search').value;
+    const apiUrl = 'https://restcountries.com/v2/name/' + searchValue;
+    async function getCountry() {
+        try {
+            const result = await _axiosDefault.default.get(apiUrl);
+            const currencies = result.data[0].currencies;
+            //Maak div aan
+            function outputContent() {
+                const newSearchInfo = document.createElement("div");
+                newSearchInfo.setAttribute('class', 'country-info-card');
+                const name = document.createElement("h3");
+                name.setAttribute('class', 'country-name');
+                name.textContent = result.data[0].name;
+                const flag = document.createElement("img");
+                flag.setAttribute('src', result.data[0].flag);
+                flag.setAttribute('class', 'flag-image');
+                const population = result.data[0].population;
+                const subregion = result.data[0].subregion;
+                const capital = result.data[0].capital;
+                const languages = result.data[0].languages;
+                const stringText = document.createElement('p');
+                stringText.setAttribute('class', 'country-info-paragraph');
+                stringText.innerHTML = `${name} is situated in ${subregion}. It has a population of ${population[0].name}.
+                                      The capital is ${capital} and you can pay with ${currencies[0].name}'s.
+                                      They speak ${languages[0].name}`;
+                newSearchInfo.appendChild(flag);
+                newSearchInfo.appendChild(name);
+                newSearchInfo.appendChild(stringText);
+                const output = document.getElementById('search-return-info');
+                output.appendChild(newSearchInfo);
             }
-            return region;
-        });
-        /*     const region =  i.region;
-        let regionColor = '';
-        //regiokleur teruggeven
-        if (region === 'Africa') {
-            regionColor = 'blue';
-        } else if (region === 'Americas') {
-            regionColor = 'green';
-        } else if (region === 'Asia') {
-            regionColor = 'red';
-        } else if (region === 'Europe') {
-            regionColor = 'yellow';
-        } else if (region === 'Oceania') {
-            regionColor = 'purple';
-        } else {
-            regionColor = 'black';
+            outputContent();
+            getCountry();
+        } catch (e) {
+            console.error(e);
         }
-
-        //style de namen van de landen op regiokleur*/ /*function change() {
-            const countryColor = document.getElementsByClassName('country-card::before');
-            countryColor.style.backgroundColor = 'pink';
-        } change()  werkt niet, why? */ return result; //Kan dit niet lezen buiten de functie, why??
-    } catch (e) {
-        console.error(e);
     }
+/* if (currencies.length === 1) {
+
+    } else {for (let i = 0; i < currencies.length; i++) {
+
+         }
+       }
+    }
+     */ //at end clear search
 }
-getFromApi(); // Country info 2 opdrachten
 
 },{"axios":"1IeuP","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"1IeuP":[function(require,module,exports) {
 module.exports = require('./lib/axios');
@@ -2119,6 +2114,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["1Mq12","5HwUs"], "5HwUs", "parcelRequirecb08")
+},{}]},["6BPv4","1hFYX"], "1hFYX", "parcelRequirecb08")
 
-//# sourceMappingURL=index.d56a3cb1.js.map
+//# sourceMappingURL=search_page.eddb7c3f.js.map

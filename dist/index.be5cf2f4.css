@@ -6,13 +6,12 @@
 }
 
 body {
-    background: #28dca8;
-    color: #fff;
+    background: #ddddde;
     font-family: 'IBM Plex Serif', serif;
+    overflow-x: hidden;
 }
 
 .heading {
-    color: #101561;;
     text-align: center;
     font-size: 40px;
     padding: 20px 0;
@@ -31,39 +30,61 @@ body {
     box-shadow: 4px 4px 8px rgba(0, 0, 0, .3);
 }
 
+a {
+    text-decoration: none;
+    font-size: 20px;
+    display: block;
+    text-align: center;
+    color: rebeccapurple;
+    margin: 20px 0;
+    padding: 10px 20px;
+    text-transform: uppercase;
+}
+
+a:hover {
+    color: #3b1e59;
+}
+
 ul {
-    margin-left: 400px;
+    margin-left: 0;
+    list-style: none;
+}
+
+#landen {
+    column-count: 3;
 }
 
 .country-card {
-    background: linear-gradient(45deg, #d500d5, #1936e5);
-    margin: 10px 0;
-    padding: 10px 20px;
+    margin: 20px 10px;
     width: fit-content;
-    border-radius: 8px;
-
 }
 
-.country-card::before {
+/*.country-card::before {
     content: '';
-    width: 30px;
+    width: 50px;
     display: block;
     background: white;
-    height: 40px;
-    position: relative;
-    top: -10px;
+    height: 100%;
+    position: absolute;
+    top: 0px;
     left: -50px;
     vertical-align: middle;
-}
+    border-radius: 8px 0 0 8px;
+}*/
 
 .country-data {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    gap: 50px;
+
 }
 
 .flag {
-    width: 80px;
+    width: 50px;
+    display: inline;
 }
+
+.country-name {
+    display: inline;
+    margin-left: 20px;
+    font-size: 16px;
+}
+
 /*# sourceMappingURL=index.be5cf2f4.css.map */
